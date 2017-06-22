@@ -2,6 +2,8 @@ package com.codepath.flixster;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,6 +38,10 @@ public class MovieListActivity extends AppCompatActivity {
     String posterSize;
     // the list of currently playing movies
     ArrayList<Movie> movies;
+    // recycler view
+    RecyclerView rvMovies;
+    // wired adapter to recyclerview
+    MovieAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,13 @@ public class MovieListActivity extends AppCompatActivity {
         movies = new ArrayList<>();
         // get the configuration on app creation
         getConfiguration();
+        // initialize the adapter - movie array CANNOT be recreated after this
+        adapter = new MovieAdapter(movies);
+
+        // resolve the recycler view and connect a layout manager and the adapter
+        rvMovies = (RecyclerView) findViewById(R.id.rvMovies);
+        rvMovies.setLayoutManager(new LinearLayoutManager(this));
+        rvMovies.setAdapter(adapter);
     }
 
     // get the list of currently playing movies
@@ -66,6 +79,8 @@ public class MovieListActivity extends AppCompatActivity {
                     for (int i = 0; i < results.length(); i++){
                         Movie movie = new Movie(results.getJSONObject(i));
                         movies.add(movie);
+                        // notify adapter that row was changed
+                        adapter.notifyItemInserted(movies.size() - 1);
                     }
                     Log.i(TAG, String.format("Loaded %s movies", results.length()));
 
