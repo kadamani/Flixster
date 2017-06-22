@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.codepath.flixster.models.Config;
 import com.codepath.flixster.models.Movie;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -32,16 +33,16 @@ public class MovieListActivity extends AppCompatActivity {
 
     // instance fields
     AsyncHttpClient client;
-    // the base url for loading images
-    String imageBaseUrl;
-    // the poster size to use when fetching images
-    String posterSize;
+
     // the list of currently playing movies
     ArrayList<Movie> movies;
     // recycler view
     RecyclerView rvMovies;
     // wired adapter to recyclerview
     MovieAdapter adapter;
+    // image config
+    Config config;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,15 +109,11 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
-                    JSONObject images = response.getJSONObject("images");
-                    imageBaseUrl = images.getString("secure_base_url");
-                    // get the poster size
-                    JSONArray posterSizeOptions = images.getJSONArray("poster_sizes");
-                    // use option 3 in the array
-                    posterSize = posterSizeOptions.optString(3, "w342");
-
+                    config = new Config(response);
                     Log.i(TAG, String.format("Loaded configuration with imageBaseUrl %s and " +
-                            "posterSize %s", imageBaseUrl, posterSize));
+                            "posterSize %s", config.getImageBaseUrl(), config.getPosterSize()));
+                    // pass config to adapter
+                    adapter.setConfig(config);
                     // get the now playing movie list
                     getNowPlaying();
                 } catch (JSONException e) {
