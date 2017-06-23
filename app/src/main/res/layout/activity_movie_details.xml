@@ -42,4 +42,17 @@
         android:text="TextView"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/vidBtn"
+        android:onClick="playVid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="127dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginStart="56dp"
+        android:layout_toEndOf="@+id/rbVoteAverage"
+        android:layout_toRightOf="@+id/rbVoteAverage"
+        android:text="Video" />
 </RelativeLayout>

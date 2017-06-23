@@ -12,6 +12,7 @@ import org.parceler.Parcel;
 public class Movie {
     // values from API
     Double voteAverage;
+    public Integer id;
     public String title;
     public String overview;
     public String posterPath; // only the path
@@ -24,6 +25,7 @@ public class Movie {
         overview = object.getString("overview");
         posterPath = object.getString("poster_path");
         backdropPath = object.getString("backdrop_path");
+        id = object.getInt("id");
     }
 
     public Movie() {
@@ -35,6 +37,10 @@ public class Movie {
 
     public Double getVoteAverage() {
         return voteAverage;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getOverview() {

@@ -45,6 +45,8 @@ public class MovieListActivity extends AppCompatActivity {
     // image config
     Config config;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +59,13 @@ public class MovieListActivity extends AppCompatActivity {
         // get the configuration on app creation
         getConfiguration();
         // initialize the adapter - movie array CANNOT be recreated after this
-        adapter = new MovieAdapter(movies);
+        adapter = new MovieAdapter(movies, new MovieAdapter.OnMovieClicked() {
+
+            @Override
+            public void clicked(Movie movie) {
+                movie.getId();
+            }
+        });
 
         //connect a layout manager and the adapter
         rvMovies.setLayoutManager(new LinearLayoutManager(this));

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,13 +32,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     // list of movies
     ArrayList<Movie> movies;
 
+    OnMovieClicked showDetails;
+
     // config needed for image urls
     Config config;
     // context for rendering
     Context context;
     // initiailize with list
-    public MovieAdapter(ArrayList<Movie> movies) {
+
+    public MovieAdapter(ArrayList<Movie> moviesm, OnMovieClicked showDetails) {
         this.movies = movies;
+        this.showDetails = showDetails;
     }
 
     public Config getConfig() {
@@ -56,6 +61,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         LayoutInflater inflater = LayoutInflater.from(context);
         // create the view using the item_movie layout
         View movieView = inflater.inflate(R.layout.item_movie, parent, false);
+
         return new ViewHolder(movieView);
     }
 
@@ -63,7 +69,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         // get the movie data at the specified position
-        Movie movie = movies.get(position);
+        final Movie movie = movies.get(position);
         // populate the view with the movie data
         holder.tvTitle.setText(movie.getTitle());
         holder.tvOverview.setText(movie.getOverview());
@@ -84,6 +90,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             imageUrl = config.getImageUrl(config.getBackdropSize(), movie.getBackdropPath());
         }
 
+
+
         // get the correct placeholder and imageview depending on orientation
         int placeHolderId = isPortrait ? R.drawable.flicks_movie_placeholder :
                 R.drawable.flicks_backdrop_placeholder;
@@ -95,6 +103,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 .placeholder(R.drawable.flicks_movie_placeholder)
                 .error(placeHolderId)
                 .into(imageView);
+
+        holder.vidBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDetails.clicked(movie);
+            }
+        });
     }
 
     // returns the total number of items in the list
@@ -130,6 +145,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         @BindView(R.id.tvTitle) TextView tvTitle;
         @Nullable @BindView(R.id.ivBackdropImage) ImageView ivBackdropImage;
         @BindView(R.id.tvOverview) TextView tvOverview;
+        @BindView(R.id.vidBtn) Button vidBtn;
 
         public ViewHolder (View itemView)  {
             super(itemView);
@@ -142,5 +158,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             // add this to itemView onClickListener
             itemView.setOnClickListener(this);
         }
+    }
+
+    public interface OnMovieClicked {
+        public void clicked(Movie movie);
     }
 }
