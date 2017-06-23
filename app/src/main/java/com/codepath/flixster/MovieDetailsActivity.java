@@ -20,6 +20,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 import static com.codepath.flixster.MovieListActivity.API_BASE_URL;
@@ -27,22 +29,20 @@ import static com.codepath.flixster.MovieListActivity.API_KEY_PARAM;
 
 public class MovieDetailsActivity extends YouTubeBaseActivity {
 
-    public static final String MOVIE_ID = "movieId";
+    @BindView(R.id.tvRelease) TextView tvRelease;
+    @BindView(R.id.tvTitle) TextView tvTitle;
+    @BindView(R.id.tvOverview) TextView tvOverview;
+    @BindView(R.id.rbVoteAverage) RatingBar rbVoteAverage;
 
     Movie movie;
-    TextView tvTitle;
-    TextView tvOverview;
-    RatingBar rbVoteAverage;
     AsyncHttpClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
+        ButterKnife.bind(this);
 
-        tvTitle = (TextView) findViewById(R.id.tvTitle);
-        tvOverview = (TextView) findViewById(R.id.tvOverview);
-        rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
         client = new AsyncHttpClient();
 
         // unwrap the movie passed in via intent, using its simple name as a key
@@ -51,9 +51,9 @@ public class MovieDetailsActivity extends YouTubeBaseActivity {
 
         // set the title and overview
         tvTitle.setText(movie.getTitle());
-
         tvOverview.setText(movie.getOverview());
-
+        tvRelease.setText("\n Released: " + movie.getTvRelease());
+        tvRelease.setTextColor(Color.WHITE);
         // vote average is 0..10, convert to 0..5 by dividing by 2
         float voteAverage = movie.getVoteAverage().floatValue();
         rbVoteAverage.setRating(voteAverage = voteAverage > 0 ? voteAverage / 2.0f : voteAverage);

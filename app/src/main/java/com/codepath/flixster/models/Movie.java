@@ -13,6 +13,7 @@ public class Movie {
     // values from API
     Double voteAverage;
     public String title;
+    public String tvRelease;
     public String overview;
     public String posterPath; // only the path
     public String backdropPath;
@@ -26,9 +27,14 @@ public class Movie {
         posterPath = object.getString("poster_path");
         backdropPath = object.getString("backdrop_path");
         id = object.getString("id");
+        tvRelease = object.getString("release_date");
     }
 
     public Movie() {
+    }
+
+    public String getTvRelease() {
+        return tvRelease;
     }
 
     public String getTitle() {
